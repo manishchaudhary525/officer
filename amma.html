@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Indian Armed Forces</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/feather-icons"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+:root { --soft: #f4f6f9; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--soft);
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+  margin: 0;
+}
+body, img {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+img {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+#flipCard { perspective: 1200px; }
+#flipInner {
+  transform-style: preserve-3d;
+  transition: transform 0.7s;
+  cursor: pointer;
+}
+#flipFront, #flipBack {
+  backface-visibility: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+              0 4px 6px -2px rgb(0 0 0 / 0.05);
+}
+#flipBack { transform: rotateY(180deg); }
+.max-h-0 { max-height: 0; overflow: hidden; }
+.transition-max-height { transition: max-height 0.4s ease; }
+</style>
+</head>
+<body class="min-h-screen bg-cover bg-center"
+  style="background-image: url('https://media.istockphoto.com/id/1297933144/vector/vector-illustration-of-indian-tricolor-flag-background.jpg?s=612x612&w=0&k=20&c=tCd-ZdLMNHw_KAMZTX9zStqEDdWzXlS6FYrvjrZIswk=')"
+  oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
+
+<!-- Login Screen -->
+<section id="loginScreen" class="min-h-screen flex items-center justify-center">
+  <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4" oncontextmenu="return false;">
+    <div class="text-center mb-8">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Armed_forces_logo.png" alt="Logo" class="h-20 mx-auto mb-4" draggable="false" />
+      <h2 class="text-2xl font-bold text-gray-800">Indian Armed Forces</h2>
+      <p class="text-sm text-gray-600 mt-2">Official Portal Login</p>
+    </div>
+    <div class="mb-6">
+      <label for="serviceId" class="block text-sm font-semibold text-gray-700 mb-2">ENTER YOUR SERVICE ID</label>
+      <input type="text" id="serviceId" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-600 focus:outline-none text-center font-mono text-lg uppercase" placeholder="" autocomplete="off" oncopy="return false" oncut="return false" onpaste="return false" />
+    </div>
+    <div id="loginError" class="text-center text-red-600 font-semibold min-h-[1.5rem] text-sm mb-4"></div>
+    <button onclick="verifyServiceId()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition text-lg">SUBMIT</button>
+    <div class="mt-6 text-center">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/Ministry_of_Defence_India.svg" alt="MOD" class="h-12 mx-auto" draggable="false" />
+    </div>
+  </div>
+</section>
+
+<!-- Loading Screen -->
+<div id="loadingScreen" class="fixed inset-0 z-50 hidden bg-white flex items-center justify-center">
+  <div class="text-center select-none">
+    <svg class="animate-spin h-16 w-16 mb-4 text-blue-700 mx-auto" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+    </svg>
+    <p class="text-xl font-bold text-blue-700">Loading Profile...</p>
+  </div>
+</div>
+
+<!-- Profile Screen -->
+<section id="profileScreen" class="min-h-screen bg-white hidden">
+  <div class="max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8 select-none">
+    <div class="flex justify-between items-center border-b pb-4 mb-8 sticky top-0 bg-white z-20">
+      <div class="flex items-center">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Armed_forces_logo.png" alt="Logo" class="h-12" draggable="false" />
+        <span class="ml-2 text-xs font-bold text-gray-600">OFFICIAL PORTAL</span>
+      </div>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/Ministry_of_Defence_India.svg" alt="MOD" class="h-10" draggable="false" />
+    </div>
+    <div class="text-center mb-10" data-aos="fade-up">
+      <h2 class="text-xl md:text-2xl font-bold text-gray-800">Capt. Manish Chaudhary</h2>
+      <h3 class="text-lg text-gray-600">Sena Medal, COAS Commendation</h3>
+    </div>
+    <div class="flex justify-center mb-10" data-aos="fade-up">
+      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhISB6movUbsuSVILnJo9-b6wLhjQY4SsvR9UGxKl_UR_BuKsRKsn5OnNbiG9mGfCvYy-VMZbhWtiKV5_OPnNtwctYo9Q8ScSi-e4TttlgpkmrEStxvsBWA1QW716Or5YnqwQvlF-5l4C42GD4q3bVcJPkZVR3dsfvHPc9W6plwRq_km7tKVs0GkIRNOraW/s16000/%E0%A4%95%E0%A5%88%E0%A4%A8%E0%A5%8D%E0%A4%9F%E0%A5%80%E0%A4%A8%20%E0%A4%B8%E0%A5%8D%E0%A4%AE%E0%A4%BE%E0%A4%B0%E0%A5%8D%E0%A4%9F%20%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A5%8D%E0%A4%A1.jpeg" alt="Officer Photo" class="rounded-xl shadow-lg w-48 h-64 object-cover border-4 border-white" draggable="false" />
+    </div>
+    <div class="overflow-x-auto mb-10" data-aos="fade-up">
+      <table class="w-full border-collapse min-w-[320px] md:min-w-auto" oncopy="return false" oncut="return false" onpaste="return false">
+        <tbody class="divide-y divide-gray-200">
+          <tr><td class="py-3 px-4 font-semibold bg-gray-100">Allegiance</td><td class="py-3 px-4">India</td></tr>
+          <tr><td class="py-3 px-4 font-semibold bg-gray-100">Branch</td><td class="py-3 px-4">Indian Army</td></tr>
+          <tr><td class="py-3 px-4 font-semibold bg-gray-100">Years of service</td><td class="py-3 px-4">13 June 2020 – Serving</td></tr>
+          <tr><td class="py-3 px-4 font-semibold bg-gray-100">Rank</td><td class="py-3 px-4">Captain</td></tr>
+          <tr><td class="py-3 px-4 font-semibold bg-gray-100">Service number</td><td class="py-3 px-4 font-mono">IC-80129D</td></tr>
+          <tr><td class="py-3 px-4 font-semibold bg-gray-100">Unit</td><td class="py-3 px-4">18 Dogra</td></tr>
+          <tr><td class="py-3 px-4 font-semibold bg-gray-100">Posted</td><td class="py-3 px-4">Staff Officer Grade II Operations (SO2 OPS) HQ I Corps Strike 1 Mathura U.P</td></tr>
+          <tr><td class="py-3 px-4 font-semibold bg-gray-100">Awards</td><td class="py-3 px-4">Sena Medal, COAS Commendation</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="flex flex-wrap md:flex-nowrap justify-center md:justify-between gap-3 mb-10" data-aos="fade-up">
+      <a href="#" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-xs font-bold flex items-center" onclick="showPasswordModal(event, 'defence')"><i data-feather="credit-card" class="mr-1"></i> DEFENCE ID</a>
+      <a href="#" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-xs font-bold flex items-center" onclick="showPasswordModal(event, 'csd')"><i data-feather="file-text" class="mr-1"></i> CSD CARD</a>
+      <a href="#" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-xs font-bold flex items-center" onclick="showPasswordModal(event, 'medical')"><i data-feather="map-pin" class="mr-1"></i> MEDICAL CARD</a>
+    </div>
+
+    <!-- Accordion -->
+    <div class="max-w-4xl mx-auto px-4 py-6 space-y-4 select-none" data-aos="fade-up">
+      <!-- Section 1 -->
+      <div class="border rounded-lg border-gray-300">
+        <button class="w-full flex justify-between items-center px-6 py-4 font-semibold text-left text-gray-800 hover:bg-gray-50 transition"
+          aria-expanded="false"
+          aria-controls="section1-content"
+          id="section1-header"
+          onclick="toggleAccordion(1)">
+          <span>Educational &amp; Military Training Background</span>
+          <svg id="icon-1" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        </button>
+        <div id="section1-content" class="max-h-0 transition-max-height px-6 pb-6 text-gray-700 text-sm" aria-labelledby="section1-header" role="region" style="max-height: 0;">
+          <ol class="list-decimal list-inside space-y-2">
+            <li><strong>National Defence Academy (NDA)</strong><br />
+              <ul class="list-disc list-inside ml-5 space-y-1">
+                <li>Course: 135th Course</li>
+                <li>Joined NDA: 2015</li>
+                <li>Passing Out Parade (POP): 30 November 2018 at Khetrapal Parade Ground, NDA Pune</li>
+                <li>Reviewing Officer: Chief of Army Staff, General Bipin Rawat</li>
+                <li>Highlights: NDA training equipped Capt. Chaudhary with a strong foundation in military science, leadership, and strategy. He excelled in academics, physical training, and leadership exercises, preparing him for operational excellence in the Indian Army.</li>
+              </ul>
+            </li>
+            <li><strong>Indian Military Academy (IMA)</strong><br />
+              <ul class="list-disc list-inside ml-5 space-y-1">
+                <li>Course: 146th Regular Course, Delta Company</li>
+                <li>Joined IMA: July 2018</li>
+                <li>Passing Out Parade (POP): 13 June 2020</li>
+                <li>Highlights: IMA provided rigorous training in tactics, operational planning, and leadership. Capt. Chaudhary successfully completed all phases, earning distinction in field exercises, leadership development, and operational readiness.</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- Section 2 -->
+      <div class="border rounded-lg border-gray-300">
+        <button class="w-full flex justify-between items-center px-6 py-4 font-semibold text-left text-gray-800 hover:bg-gray-50 transition"
+          aria-expanded="false"
+          aria-controls="section2-content"
+          id="section2-header"
+          onclick="toggleAccordion(2)">
+          <span>Military Career &amp; Commissioning</span>
+          <svg id="icon-2" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        </button>
+        <div id="section2-content" class="max-h-0 transition-max-height px-6 pb-6 text-gray-700 text-sm" aria-labelledby="section2-header" role="region" style="max-height: 0;">
+          <p><strong>Commission as Lieutenant</strong></p>
+          <ul class="list-disc list-inside ml-5 space-y-1">
+            <li>Date: 13 June 2020</li>
+            <li>First Posting: 18th Battalion, Dogra Infantry Regiment, Ashok Chakra Paltan, Jammu &amp; Kashmir</li>
+            <li>Responsibilities: Operational planning, field leadership, coordination with units in sensitive operational areas.</li>
+          </ul>
+          <p class="my-3"><strong>Promotion to Captain</strong></p>
+          <ul class="list-disc list-inside ml-5 space-y-1">
+            <li>Date: 13 June 2022 (promoted by commanding officer)</li>
+            <li>Current Posting: HQ I Corps, Strike 1 Corps, Mathura, U.P</li>
+            <li>Date of Current Posting: 14 April 2023</li>
+            <li>Reporting Officer: Col Bhupendra Sharma, VSM, 12 Rajput Regiment, Col (GS), HQ 1 Corps</li>
+            <li>Key Roles: Staff Officer Grade II Operations (SO2 OPS), contributing to strategic planning, operational coordination, and policy implementation within HQ I Corps.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Section 3 -->
+      <div class="border rounded-lg border-gray-300">
+        <button class="w-full flex justify-between items-center px-6 py-4 font-semibold text-left text-gray-800 hover:bg-gray-50 transition"
+          aria-expanded="false"
+          aria-controls="section3-content"
+          id="section3-header"
+          onclick="toggleAccordion(3)">
+          <span>Awards &amp; Recognitions</span>
+          <svg id="icon-3" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        </button>
+        <div id="section3-content" class="max-h-0 transition-max-height px-6 pb-6 text-gray-700 text-sm" aria-labelledby="section3-header" role="region" style="max-height: 0;">
+          <ol class="list-decimal list-inside space-y-2">
+            <li><strong>Sena Medal (SM)</strong><br/>
+              Awarded by President of India, Shri Droupadi Murmu, on 26 January 2023. Recognized for distinguished service, professional excellence, and dedication to operational duties in challenging environments.
+            </li>
+            <li><strong>COAS Commendation Badge</strong><br/>
+              Awarded by Chief of Army Staff, Lt Gen Upendra Dwivedi, on 15 August 2025. Honoured for outstanding performance, exemplary commitment to duties, and significant contributions to Army operations and staff responsibilities.
+            </li>
+          </ol>
+          <p class="mt-3">
+            These awards reflect Capt. Chaudhary's dedication, courage, and professionalism, marking him as a role model among his peers.
+          </p>
+        </div>
+      </div>
+
+      <!-- Section 4 -->
+      <div class="border rounded-lg border-gray-300">
+        <button class="w-full flex justify-between items-center px-6 py-4 font-semibold text-left text-gray-800 hover:bg-gray-50 transition"
+          aria-expanded="false"
+          aria-controls="section4-content"
+          id="section4-header"
+          onclick="toggleAccordion(4)">
+          <span>Professional &amp; Ceremonial Engagements</span>
+          <svg id="icon-4" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        </button>
+        <div id="section4-content" class="max-h-0 transition-max-height px-6 pb-6 text-gray-700 text-sm space-y-3" aria-labelledby="section4-header" role="region" style="max-height: 0;">
+          <div><strong>Ceremonial &amp; Social Duties:</strong>
+            <ul class="list-disc list-inside ml-5 space-y-1">
+              <li>Participation in Army Day, Republic Day, and Guard of Honour ceremonies</li>
+              <li>Attendance at official defence, strategy, and operations conferences, meetings, and seminars</li>
+              <li>Engagement in community outreach and civic programs, including National Service Scheme (NSS), Army Public Schools, and various welfare programs</li>
+            </ul>
+          </div>
+          <div><strong>Sports &amp; Physical Activities:</strong>
+            <ul class="list-disc list-inside ml-5 space-y-1">
+              <li>Active participation in Army Sports Events including Cricket and Football</li>
+              <li>Maintains rigorous physical training to set standards for discipline and excellence</li>
+            </ul>
+          </div>
+          <div><strong>Workshops &amp; Seminars:</strong>
+            <ul class="list-disc list-inside ml-5 space-y-1">
+              <li>Attended multiple workshops and seminars on Leadership, Strategy, and Professional Development</li>
+              <li>Shared experiences and contributed to discussions on operational efficiency, tactical planning, and personnel management</li>
+            </ul>
+          </div>
+          <div><strong>Community &amp; Welfare Programs:</strong>
+            <ul class="list-disc list-inside ml-5 space-y-1">
+              <li>Conducted motivational talks at Army Public Schools, inspiring students towards excellence and discipline</li>
+              <li>Coordinated with schools for academic and extracurricular development, integrating community engagement with military outreach</li>
+              <li>Actively contributed to welfare programs, enhancing the morale and well-being of local communities</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5 -->
+      <div class="border rounded-lg border-gray-300">
+        <button class="w-full flex justify-between items-center px-6 py-4 font-semibold text-left text-gray-800 hover:bg-gray-50 transition"
+          aria-expanded="false"
+          aria-controls="section5-content"
+          id="section5-header"
+          onclick="toggleAccordion(5)">
+          <span>Professional Skills &amp; Competencies</span>
+          <svg id="icon-5" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        </button>
+        <div id="section5-content" class="max-h-0 transition-max-height px-6 pb-6 text-gray-700 text-sm" aria-labelledby="section5-header" role="region" style="max-height: 0;">
+          <ul class="list-disc list-inside space-y-2">
+            <li>Operational Leadership: Planning and execution of operations, staff coordination, and strategic decision-making</li>
+            <li>Ceremonial Expertise: Commanding parades, organising official ceremonies, and upholding Army traditions</li>
+            <li>Community Engagement: Strong commitment to education, welfare programs, and motivational outreach</li>
+            <li>Sports &amp; Physical Excellence: Active role in Army sports, promoting teamwork, fitness, and discipline</li>
+            <li>Strategic Planning &amp; Administration: Experienced in operational planning at HQ level, coordinating multiple units and departments</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="bg-red-600 text-white p-4 rounded-lg text-center text-sm mt-10">
+      2025, Ministry of Defence, Government of India
+    </div>
+  </div>
+</section>
+
+<!-- Password Modal -->
+<div id="passwordModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-40">
+  <div class="bg-white rounded-xl shadow-2xl p-8 max-w-xs w-full mx-4" role="dialog" aria-modal="true" oncontextmenu="return false;">
+    <div class="mb-4 text-lg text-center font-bold text-gray-700">Enter Password</div>
+    <input type="password" id="popupPassword" class="w-full px-3 py-2 mb-2 rounded border border-gray-300 text-center font-mono" aria-label="Password Input" autocomplete="off" oncopy="return false" oncut="return false" onpaste="return false" />
+    <div id="passError" class="text-center text-red-600 min-h-[1.5rem] text-xs"></div>
+    <div class="flex justify-center mt-3">
+      <button onclick="verifyPassword()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">VERIFY</button>
+      <button onclick="closePasswordModal()" class="ml-2 text-gray-500 hover:text-gray-700 px-3 font-bold">CANCEL</button>
+    </div>
+  </div>
+</div>
+
+<!-- Flip Card Modal -->
+<div id="flipCardModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-50">
+  <div class="bg-transparent flex flex-col items-center max-w-xs mx-4 sm:max-w-md" oncontextmenu="return false;">
+    <div id="flipCard" class="w-72 h-44 relative mb-6 rounded-xl">
+      <div id="flipInner" class="relative w-full h-full">
+        <div id="flipFront" class="absolute top-0 left-0 bg-white rounded-xl flex items-center justify-center border-4 border-blue-500">
+          <img id="frontImage" src="" alt="Front side of card" class="w-72 h-44 rounded-xl object-contain select-none" draggable="false" />
+        </div>
+        <div id="flipBack" class="absolute top-0 left-0 bg-white rounded-xl flex items-center justify-center border-4 border-blue-700" style="transform: rotateY(180deg)">
+          <img id="backImage" src="" alt="Back side of card" class="w-72 h-44 rounded-xl object-contain select-none" draggable="false" />
+        </div>
+      </div>
+    </div>
+    <button onclick="closeFlipCardModal()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-xl">BACK</button>
+  </div>
+</div>
+
+<script>
+// Login functionality
+function verifyServiceId() {
+  const serviceId = document.getElementById('serviceId').value.trim().toUpperCase();
+  const loginError = document.getElementById('loginError');
+  
+  if (serviceId === 'IC80129D') {
+    loginError.textContent = '';
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('loadingScreen').classList.remove('hidden');
+    
+    setTimeout(() => {
+      document.getElementById('loadingScreen').classList.add('hidden');
+      document.getElementById('profileScreen').classList.remove('hidden');
+      feather.replace();
+      AOS.init({ once: true });
+    }, 3000);
+  } else {
+    loginError.textContent = 'Invalid Service ID!';
+    setTimeout(() => {
+      loginError.textContent = '';
+    }, 2000);
+  }
+}
+
+document.getElementById('serviceId').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    verifyServiceId();
+  }
+});
+
+// Accordion functionality
+function toggleAccordion(index) {
+  const content = document.getElementById(`section${index}-content`);
+  const icon = document.getElementById(`icon-${index}`);
+  const isExpanded = content.style.maxHeight && content.style.maxHeight !== "0px";
+  const plusSVG = `<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />`;
+  const minusSVG = `<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />`;
+  if (isExpanded) {
+    content.style.maxHeight = '0';
+    icon.style.transform = 'rotate(0deg)';
+    icon.innerHTML = plusSVG;
+    icon.parentNode.setAttribute('aria-expanded', 'false');
+  } else {
+    closeAllExcept(index);
+    content.style.maxHeight = content.scrollHeight + "px";
+    icon.style.transform = 'rotate(90deg)';
+    icon.innerHTML = minusSVG;
+    icon.parentNode.setAttribute('aria-expanded', 'true');
+  }
+}
+
+function closeAllExcept(openIndex) {
+  for(let i=1; i<=5; i++) {
+    if(i !== openIndex) {
+      const content = document.getElementById(`section${i}-content`);
+      const icon = document.getElementById(`icon-${i}`);
+      if(content && icon) {
+        content.style.maxHeight = '0';
+        icon.style.transform = 'rotate(0deg)';
+        icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />`;
+        icon.parentNode.setAttribute('aria-expanded', 'false');
+      }
+    }
+  }
+}
+
+// Password modal and flip card functionality
+let passwordModal = document.getElementById("passwordModal");
+let popupPassword = document.getElementById("popupPassword");
+let passError = document.getElementById("passError");
+let lastCardType = null;
+const flipCardModal = document.getElementById("flipCardModal");
+const flipInner = document.getElementById("flipInner");
+const frontImage = document.getElementById("frontImage");
+const backImage = document.getElementById("backImage");
+const cardImages = {
+  defence: {
+    front: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Indian_Army_Logo.svg/256px-Indian_Army_Logo.svg.png",
+    back: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Flag_of_India.svg/256px-Flag_of_India.svg.png",
+  },
+  csd: {
+    front: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgAVH_PBkkNGf5WPJ-m76cuw9Ww-skMaO-ubHGH1Ub-ACgp8HSL-2d_8SJtlwYgp-uQl078kdVtVX95Wb1jMEuGfKzn2C2E3RbtSbXXrOWW9OgiVLP8qQto1lfIRwgq3Pen7BDyqeL8kdrZ9o7GTzTJZrjp_Je9v6Chh0NM4vMTuW8BoLv5MnJEtEBW4RlH/s16000/कैन्टीन%20स्मार्ट%20कार्ड.jpeg",
+    back: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Emblem_of_Armed_Forces_of_India.svg/256px-Emblem_of_Armed_Forces_of_India.svg.png",
+  },
+  medical: {
+    front: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Red_Cross.svg/200px-Red_Cross.svg.png",
+    back: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Red_Crescent.svg/200px-Red_Crescent.svg.png",
+  },
+};
+
+function showPasswordModal(e, type) {
+  e.preventDefault();
+  passwordModal.classList.remove("hidden");
+  popupPassword.value = "";
+  passError.textContent = "";
+  lastCardType = type;
+  setTimeout(() => { popupPassword.focus(); }, 10);
+}
+
+function closePasswordModal() {
+  passwordModal.classList.add("hidden");
+}
+
+function verifyPassword() {
+  let pass = popupPassword.value.trim();
+  if (pass === "CMC8755" && lastCardType) {
+    closePasswordModal();
+    showLoadingAndFlipCard(lastCardType);
+  } else {
+    passError.textContent = "Invalid Password!";
+    setTimeout(() => { passError.textContent = ""; }, 2000);
+  }
+}
+
+function showLoadingAndFlipCard(type) {
+  let loadingDiv = document.createElement("div");
+  loadingDiv.id = "cardLoadingDiv";
+  loadingDiv.className = "fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30";
+  loadingDiv.innerHTML = `
+    <div class="bg-white rounded-2xl px-8 py-6 text-xl font-bold text-blue-700 flex flex-col items-center select-none">
+      <svg class="animate-spin h-8 w-8 mb-3 text-blue-800" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+      </svg>Loading...
+    </div>`;
+  document.body.appendChild(loadingDiv);
+  setTimeout(() => {
+    document.body.removeChild(loadingDiv);
+    openFlipCardModal(type);
+  }, 3000);
+}
+
+function openFlipCardModal(type) {
+  frontImage.src = cardImages[type].front;
+  backImage.src = cardImages[type].back;
+  flipInner.style.transform = "rotateY(0deg)";
+  flipCardModal.classList.remove("hidden");
+}
+
+function closeFlipCardModal() {
+  flipCardModal.classList.add("hidden");
+}
+
+document.getElementById("flipCard").onclick = function () {
+  flipInner.style.transform = flipInner.style.transform === "rotateY(180deg)" ? "rotateY(0deg)" : "rotateY(180deg)";
+};
+
+flipCardModal.addEventListener("click", (e) => { if (e.target === flipCardModal) closeFlipCardModal(); });
+passwordModal.addEventListener("click", (e) => { if (e.target === passwordModal) closePasswordModal(); });
+document.addEventListener('contextmenu', event => event.preventDefault());
+</script>
+</body>
+</html>
